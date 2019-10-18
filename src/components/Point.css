@@ -1,0 +1,27 @@
+.point {
+	cursor: pointer;
+	position: absolute;
+	width: 2%;
+	animation: fadein 2s;
+}
+
+@keyframes fadein {
+	from {
+		opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+}
+
+.point svg {
+	fill: #4949ff;
+	stroke: white;
+	stroke-width: 20px;
+	transition: all .2s ease-in-out;
+}
+
+.point svg:hover {
+	transform: scale(1.2);
+	filter: drop-shadow(0 0 8px #8989ff);
+} 
