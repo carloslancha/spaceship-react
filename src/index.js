@@ -25,7 +25,9 @@ const apolloClient = new ApolloClient({
 export default function main({portletNamespace, contextPath, portletElementId, configuration}) {
 	ReactDOM.render(
 		<ApolloProvider client={apolloClient}>
-			<App />
+			<App 
+				configuration={configuration}
+			/>
 		</ApolloProvider>,
 		document.getElementById(portletElementId)
 	);    
