@@ -1,5 +1,47 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Getting Started
+
+In order to be able to automatically deploy the App to DXP you need to configure your DXP local installation path.
+
+Replace `liferayDir` with yours in `.npmbuildrc`.
+```
+{
+    "liferayDir": "/Users/carloslancha/Proyectos/liferay/devcon-2019/liferay-dxp-7.2.10.1-sp1"
+}
+```
+
+### Data on DXP
+From the commit "Get data from DXP with GraphQL" displayed data comes from Liferay DXP Structured Content, so you will need to configure your DXP and create some content.
+
+#### Configure CORS
+
+- Go to Configuration / System Settings / Security Tools / Portal CORS
+
+- Add new URL Pattern with value `/o/graphql` and Save.
+
+#### Import Structured Content
+
+- Go to Content & Data / Web Content
+
+- Go to Import / Export
+
+- Import file `dxp/Web_Content.lar`
+
+### Running the App
+
+Run `yarn install`
+
+Replace Liferay DXP user and password with yours in `src/constants.js``
+```
+const USER_DATA = {
+    user: 'test@liferay.com',
+    password: 'test'
+};
+```
+
+Replace `SITE_ID` and `CONTENT_KEY` values with the ones from the content you want to get.
+
 ## Available Scripts
 
 In the project directory, you can run:

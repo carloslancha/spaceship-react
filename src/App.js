@@ -1,40 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Spaceship from './components/Spaceship';
-import spaceshipPicture from './images/falcon.jpg';
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+import { CONTENT_KEY, DOMAIN, SITE_ID } from './constants';
 
 function App() {
-	return (
-		<Spaceship
-			spaceshipName='Spaceship Name'
-			spaceshipDescription='Awesome spaceship caption'
-			spaceshipPicture={spaceshipPicture}
-			spaceshipParts={[
-				{
-					description: 'Amazing detail about piece 1',
-					name: 'Piece #1',
-					x: '18%',
-					y: '48%'
-				},
-				{
-					description: 'Amazing detail about piece 2',
-					name: 'Piece #2',
-					x: '33.4%',
-					y: '68%'
-				},
-				{
-					description: 'Amazing detail about piece 3',
-					name: 'Piece #3',
-					x: '60%',
-					y: '23%'
-				},
-				{
-					description: 'Amazing detail about piece 4',
-					name: 'Piece #4',
-					x: '79.4%',
-					y: '48%'
+	const [spaceship, setSpaceship] = useState();
+
+	const processContent = (data) => {
+		const structuredContentByKey = data.structuredContentByKey;
+
+		const spaceship = {
+			name: structuredContentByKey.title,
+			parts: []
+		};
+
+		structuredContentByKey.contentFields.forEach(field => {
+
+			if (!field.nestedContentFields.length > 0) {
+				spaceship[field.label.toLowerCase()] = field.value.data || 
+				(field.value.image && 
+					`${DOMAIN}${field.value.image.contentUrl}`
+				)
+			} else {
+				const spaceshipPart = {
+					name: field.value.data
+				};
+
+				field.nestedContentFields.forEach(nestedField => {
+					spaceshipPart[nestedField.label.toLowerCase()] = nestedField.value.data;
+				})
+
+				spaceship.parts.push(spaceshipPart);
+			}
+		});
+
+		setSpaceship(spaceship);
+	};
+
+	useQuery(
+		gql`
+			query getSpaceship($siteId: Long!, $contentKey: String!) {
+				structuredContentByKey(key: $contentKey, siteId: $siteId) {
+					title
+					contentStructureId
+					contentFields {
+						label
+						nestedContentFields {
+							label
+							value {
+								data
+							}
+						}
+						value {
+							data
+							image {
+								contentUrl
+								encodingFormat
+							}
+						}
+					}
 				}
-			]}
-		/>
+			}
+		`,
+		{
+			onCompleted: data => { processContent(data)},
+			variables: { 
+				contentKey: CONTENT_KEY,
+				siteId: SITE_ID,
+			},
+		}
+	);
+
+	return (
+		<React.Fragment>
+			{spaceship && (
+				<Spaceship
+					spaceshipName={spaceship.name}
+					spaceshipDescription={spaceship.description}
+					spaceshipPicture={spaceship.image}
+					spaceshipParts={spaceship.parts}
+				/>
+			)}		
+		</React.Fragment>
 	);
 }
 
