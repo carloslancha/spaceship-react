@@ -4,10 +4,20 @@
 		"category": "spaceship", 
 		"name": "spaceship",
 		"fields": { 
+			"pointsColor": {
+				"type": "string",
+				"name": "points-color",
+				"default": "#4949ff"
+			}
 		} 
 	},
 	"portletInstance": {
+		"name": "Spaceship Configuration",
 		"fields": { 
+			"contentKey": {
+				"type": "string",
+				"name": "structured-spaceship-content-key-web-content"
+			}
 		} 
 	}
 }

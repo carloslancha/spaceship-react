@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import Spaceship from './components/Spaceship';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { CONTENT_KEY, DOMAIN, SITE_ID } from './constants';
+import { DOMAIN, SITE_ID } from './constants';
 
-function App() {
+function App({
+	configuration
+}) {
+	const {contentKey, siteId = SITE_ID } = configuration.portletInstance;
+
 	const [spaceship, setSpaceship] = useState();
 
 	const processContent = (data) => {
@@ -38,7 +42,7 @@ function App() {
 		setSpaceship(spaceship);
 	};
 
-	useQuery(
+	const {loading} = useQuery(
 		gql`
 			query getSpaceship($siteId: Long!, $contentKey: String!) {
 				structuredContentByKey(key: $contentKey, siteId: $siteId) {
@@ -66,8 +70,8 @@ function App() {
 		{
 			onCompleted: data => { processContent(data)},
 			variables: { 
-				contentKey: CONTENT_KEY,
-				siteId: SITE_ID,
+				contentKey: contentKey,
+				siteId: siteId
 			},
 		}
 	);
@@ -80,8 +84,21 @@ function App() {
 					spaceshipDescription={spaceship.description}
 					spaceshipPicture={spaceship.image}
 					spaceshipParts={spaceship.parts}
+					pointsColor={configuration.system.pointsColor}
 				/>
-			)}		
+			)}
+
+			{!spaceship && (!contentKey || !siteId) && (
+				<div className="text-center">
+					{Liferay.Language.get('please-configure-the-widget')}
+				</div>
+			)}
+
+			{!loading && !spaceship && contentKey && siteId && (
+				<div className="text-center">
+					{Liferay.Language.get('the-selected-content-key-does-not-exist')}
+				</div>
+			)}
 		</React.Fragment>
 	);
 }

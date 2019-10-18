@@ -3,7 +3,7 @@ import React from 'react';
 import './Point.css';
 
 function Point({
-	color = '#4949ff',
+	color,
 	onMouseEnter = () => {},
 	onMouseLeave = () => {},
 	x,
