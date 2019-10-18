@@ -1,40 +1,113 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Spaceship from './components/Spaceship';
-import spaceshipPicture from './images/falcon.jpg';
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+import { DOMAIN } from './constants';
 
 function App() {
-	return (
-		<Spaceship
-			spaceshipName='Spaceship Name'
-			spaceshipDescription='Awesome spaceship caption'
-			spaceshipPicture={spaceshipPicture}
-			spaceshipParts={[
-				{
-					description: 'Amazing detail about piece 1',
-					name: 'Piece #1',
-					x: '18%',
-					y: '48%'
-				},
-				{
-					description: 'Amazing detail about piece 2',
-					name: 'Piece #2',
-					x: '33.4%',
-					y: '68%'
-				},
-				{
-					description: 'Amazing detail about piece 3',
-					name: 'Piece #3',
-					x: '60%',
-					y: '23%'
-				},
-				{
-					description: 'Amazing detail about piece 4',
-					name: 'Piece #4',
-					x: '79.4%',
-					y: '48%'
+	const [spaceship, setSpaceship] = useState();
+
+	const processContent = (data) => {
+		console.log(data);
+		const structuredContentByKey = data.structuredContentByKey;
+
+		const spaceship = {
+			name: structuredContentByKey.title,
+			parts: []
+		};
+
+		structuredContentByKey.contentFields.forEach(field => {
+			spaceship[field.label.toLowerCase()] = field.value.data || 
+				(field.value.image && 
+					`${DOMAIN}${field.value.image.contentUrl}`
+				)
+			
+			if (field.nestedContentFields.length > 0) {
+				const spaceshipPart = {
+					name: field.value.structuredContentLink.graphQLNode.title
+				};
+
+				field.nestedContentFields.forEach(nestedField => {
+					spaceshipPart[nestedField.label.toLowerCase()] = nestedField.value.data;
+				})
+
+				field.value.structuredContentLink.graphQLNode.contentFields.forEach(linkedContentField => {
+					spaceshipPart[linkedContentField.label.toLowerCase()] = linkedContentField.value.data;
+				})
+
+				spaceship.parts.push(spaceshipPart);
+			}
+		});
+
+		console.log(spaceship);
+
+		setSpaceship(spaceship);
+	};
+
+	useQuery(
+		gql`
+			query getSpaceship($siteId: Long!, $contentKey: String!) {
+				structuredContentByKey(key: $contentKey, siteId: $siteId) {
+					title
+					relatedContents {
+						contentType
+						id
+						title
+					}
+					contentStructureId
+					contentFields {
+						label
+						nestedContentFields {
+							label
+							value {
+								data
+							}
+						}
+						value {
+							structuredContentLink {
+								graphQLNode {
+									id
+									... on StructuredContent {
+										title
+										contentFields {
+											label
+											value {
+												data
+											}
+										}
+									}
+								}
+							}
+							data
+							image {
+								contentUrl
+								encodingFormat
+							}
+						}
+					}
 				}
-			]}
-		/>
+			}
+		`,
+		{
+			onCompleted: data => { processContent(data)},
+			variables: { 
+				contentKey: '39236',
+				siteId: 38180,
+			},
+		}
+	);
+
+	return (
+		<React.Fragment>
+			{spaceship && (
+				<Spaceship
+					spaceshipName={spaceship.name}
+					spaceshipDescription={spaceship.description}
+					spaceshipPicture={spaceship.image}
+					spaceshipParts={spaceship.parts}
+				/>
+			)}		
+		</React.Fragment>
 	);
 }
 
