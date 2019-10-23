@@ -61,7 +61,7 @@ function Spaceship({
 				</div>
 
 				<div className="spaceship-parts-info-help">
-					Move the mouse pointer over the dots to discover more
+					{Liferay.Language.get('move-the-mouse-pointer-over-the-dots-to-discover-more')}
 				</div>
 			</div>
 		</div>
