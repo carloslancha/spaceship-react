@@ -3,8 +3,23 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
+import { AUTH, GRAPHQL_ENDPOINT } from './constants';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const apolloClient = new ApolloClient({
+	headers: {
+		'Authorization': AUTH
+	},
+	uri: GRAPHQL_ENDPOINT
+});
+
+ReactDOM.render(
+    <ApolloProvider client={apolloClient}>
+        <App />
+    </ApolloProvider>,
+    document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
