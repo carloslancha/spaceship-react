@@ -1,4 +1,5 @@
 {
+	"sources": ["src", "assets"],
 	"create-jar": {
 		"output-dir": "dist",
 		"features": {
@@ -8,5 +9,12 @@
 			"configuration": "features/configuration.json"
 		}
 	},
-	"dump-report": true
+	"dump-report": true,
+	"rules": [
+		{
+			"test": "\\.css$",
+			"exclude": "node_modules",
+			"use": ["style-loader"]
+		}
+	]
 }

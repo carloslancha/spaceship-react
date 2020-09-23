@@ -1,0 +1,106 @@
+.spaceship-container {
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+}
+
+.spaceship-container img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.spaceship-title {
+	color: white;
+	left: 50px;
+	position: absolute;
+	top: 50px;
+}
+
+.spaceship-title h1 {
+	font-size: 80px;
+	text-shadow: 1px 1px 8px #666666;
+}
+
+.spaceship-title p {
+	font-size: 25px;
+	text-shadow: 1px 1px 8px #000000;
+}
+
+.spaceship-parts-info {
+	background: #000000b3;
+	bottom: 0;
+	color: white;
+	padding: 20px 50px;
+	position: absolute;
+	width: 100%;
+	opacity: 0;
+}
+
+.spaceship-parts-info.out {
+	animation: fadeout 0.5s;
+	opacity: 0;
+}
+
+.spaceship-parts-info.in {
+	animation: fadein 0.5s;
+	opacity: 1;
+}
+
+.spaceship-parts-info h2 {
+	margin-top: 0;
+}
+
+.spaceship-parts-info-help {
+	top: 0;
+	padding: 10px;
+	position: absolute;
+	color: white;
+	right: 0;
+	text-shadow: 1px 1px 8px #666666;
+}
+
+@keyframes fadein {
+	from {
+		opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+}
+
+@keyframes fadeout {
+	from {
+		opacity:1;
+	}
+	to {
+		opacity:0;
+	}
+}
+
+.point {
+	cursor: pointer;
+	position: absolute;
+	width: 2%;
+	animation: fadein 2s;
+}
+
+@keyframes fadein {
+	from {
+		opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+}
+
+.point svg {
+	fill: #4949ff;
+	stroke: white;
+	stroke-width: 20px;
+	transition: all .2s ease-in-out;
+}
+
+.point svg:hover {
+	transform: scale(1.2);
+	filter: drop-shadow(0 0 8px #8989ff);
+} 
