@@ -4,6 +4,11 @@
 		"category": "spaceship", 
 		"name": "spaceship",
 		"fields": { 
+			"pointsColor": {
+				"type": "string",
+				"name": "points-color",
+				"default": "#4949ff"
+			}
 		} 
 	},
 	"portletInstance": {

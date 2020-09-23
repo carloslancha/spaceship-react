@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import './Spaceship.css';
 
 function Spaceship({
+	pointsColor,
 	spaceshipName,
 	spaceshipDescription,
 	spaceshipPicture,
@@ -43,6 +44,9 @@ function Spaceship({
 							}}
 						>
 							<svg
+								style={{
+									fill: pointsColor
+								}}
 								viewBox="0 0 120 120"
 								version="1.1"
 								xmlns="http://www.w3.org/2000/svg"

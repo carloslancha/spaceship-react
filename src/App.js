@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { DOMAIN } from './constants';
 
-function App() {
+function App({configuration}) {
 	const [spaceship, setSpaceship] = useState();
 
 	const processContent = (data) => {
@@ -95,6 +95,7 @@ function App() {
 		<React.Fragment>
 			{spaceship && (
 				<Spaceship
+					pointsColor={configuration.system.pointsColor}
 					spaceshipName={spaceship.name}
 					spaceshipDescription={spaceship.description}
 					spaceshipPicture={spaceship.image}
