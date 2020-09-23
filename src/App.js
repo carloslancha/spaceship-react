@@ -5,6 +5,8 @@ import { gql } from 'apollo-boost';
 import { DOMAIN } from './constants';
 
 function App({configuration}) {
+	const {contentKey, siteKey} = configuration.portletInstance;
+
 	const [spaceship, setSpaceship] = useState();
 
 	const processContent = (data) => {
@@ -85,8 +87,8 @@ function App({configuration}) {
 		{
 			onCompleted: processContent,
 			variables: { 
-				contentKey: '40719',
-				siteKey: '20121',
+				contentKey,
+				siteKey,
 			},
 		}
 	);
@@ -101,7 +103,7 @@ function App({configuration}) {
 					spaceshipPicture={spaceship.image}
 					spaceshipParts={spaceship.parts}
 				/>
-			)}		
+			)}
 		</React.Fragment>
 	);
 }
