@@ -104,6 +104,14 @@ function App({configuration}) {
 					spaceshipParts={spaceship.parts}
 				/>
 			)}
+
+			{!spaceship && (!contentKey || !siteKey) && (
+				<div className="text-center">
+					{Liferay.Language.get('this-is-not-the-ship-you-are-looking-for')}
+					<br/>
+					{Liferay.Language.get('please-configure-the-widget')}
+				</div>
+			)}
 		</React.Fragment>
 	);
 }

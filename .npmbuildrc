@@ -1,6 +1,6 @@
 {
 	"translatorTextKey": "",
-	"supportedLocales": [],
+	"supportedLocales": ["es","en","fr","it"],
 	"liferayDir": "/Users/carloslancha/Proyectos/liferay/portal/master/bundles",
 	"webpack": {
 		"rules": [
